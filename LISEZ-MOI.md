@@ -3,8 +3,10 @@
 Un entraîneur de fractions : la carte affiche un calcul, et **chaque clic
 révèle une étape** du raisonnement.
 
-Pour lancer l'application : **double-clic sur `index.html`**. Rien à
-installer, ça marche même sans internet.
+**En ligne :** https://qguillaume.github.io/fraction-mania/
+
+Sur ordinateur, on peut aussi faire un **double-clic sur `index.html`** :
+tout fonctionne sans internet et sans rien installer.
 
 ## Les trois types d'exercices
 
@@ -18,21 +20,51 @@ Trois niveaux : **Facile** (dénominateurs identiques), **Moyen** (un
 dénominateur dans la table de l'autre), **Costaud** (dénominateurs
 quelconques).
 
+## Installer l'appli sur le téléphone
+
+L'application est une **PWA** : une page web qui s'installe comme une
+vraie appli, avec son icône sur l'écran d'accueil, en plein écran, et
+qui marche **sans connexion** une fois installée.
+
+- **Android (Chrome)** : ouvrir le lien, puis toucher le bouton vert
+  « ⬇ Installer l'appli ». (Il n'apparaît que si le téléphone propose
+  l'installation.) Sinon : menu ⋮ → « Installer l'application ».
+- **iPhone (Safari)** : ouvrir le lien, toucher le bouton Partager,
+  puis « Sur l'écran d'accueil ». Safari ne montre jamais de bouton
+  d'installation : c'est normal, il faut passer par là.
+
 ## Où est rangé quoi ?
 
 ```
 index.html              le squelette de la page
+manifest.webmanifest    la carte d'identité de l'appli (nom, icônes, couleurs)
+sw.js                   le "service worker" : la copie hors ligne
+icones/                 les icônes de l'appli
+
 css/1-couleurs.css      TOUTES les couleurs (le seul fichier à modifier
                         pour changer les couleurs)
 css/2-mise-en-page.css  les tailles, les positions, les formes
+
 js/1-outils.js          les maths de base : pgcd, ppcm, hasard
 js/2-affichage.js       comment dessiner une fraction sur deux lignes
 js/3-exercices.js       la fabrique des trois types d'exercices
 js/4-application.js     le chef d'orchestre : clics, clavier, boutons
+js/5-installation.js    l'installation sur le téléphone
 ```
 
 Les fichiers sont **numérotés dans l'ordre où le navigateur les charge** :
 le 2 se sert du 1, le 3 se sert du 2, et ainsi de suite.
+
+## ⚠️ Après avoir modifié un fichier
+
+Les téléphones gardent une copie de l'appli pour marcher hors ligne. Si
+on modifie quelque chose, il faut leur dire que la copie est périmée :
+
+**ouvrir `sw.js` et monter le numéro de version** (`fraction-mania-v1`
+devient `fraction-mania-v2`).
+
+Sans ça, l'ancienne version reste affichée sur les appareils qui ont
+déjà installé l'appli.
 
 ## La règle importante pour les couleurs
 

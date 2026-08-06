@@ -131,6 +131,20 @@ button[aria-pressed="true"] {
   border-color: var(--bleu);
 }
 
+/* Le bouton "Installer l'appli". Il est vert comme une réussite, et
+   entouré de pointillés pour se distinguer des autres même sans voir
+   la couleur. Il reste caché tant que le téléphone ne propose pas
+   l'installation (attribut hidden dans le HTML). */
+.installer {
+  border-style: dashed;
+  border-color: var(--vert);
+  background: var(--fond-reussite);
+}
+
+.installer:hover {
+  border-color: var(--vert);
+}
+
 
 /* ======================= C. LA GRANDE CARTE ========================== */
 

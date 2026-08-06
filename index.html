@@ -16,6 +16,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Fraction Mania</title>
+    <meta
+      name="description"
+      content="Entraîneur de fractions : chaque clic révèle une étape du calcul."
+    />
+
+    <!-- ===== La partie "application installable" (PWA) =====
+         Le manifeste est la carte d'identité de l'appli : son nom, ses
+         icônes, ses couleurs. C'est grâce à lui que le téléphone
+         propose de l'ajouter à l'écran d'accueil.
+         theme-color colore la barre du haut du téléphone : une version
+         pour le mode clair, une pour le mode sombre. -->
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#0072b2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#12161a" media="(prefers-color-scheme: dark)" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="icon" href="icones/icone-192.png" />
+    <link rel="apple-touch-icon" href="icones/icone-apple-180.png" />
 
     <!-- Les feuilles de style, dans l'ordre :
          d'abord les couleurs, ensuite la mise en page qui les utilise. -->
@@ -69,6 +86,13 @@
       <button type="button" id="nouvelle" class="principal">
         Nouvelle fraction
       </button>
+
+      <!-- Ce bouton est caché ("hidden") au départ. Il n'apparaît que si
+           le téléphone propose vraiment d'installer l'appli : c'est le
+           fichier js/5-installation.js qui le fait apparaître. -->
+      <button type="button" id="installer" class="installer" hidden>
+        ⬇ Installer l'appli
+      </button>
     </div>
 
     <!-- ================= LA GRANDE CARTE =================
@@ -111,11 +135,13 @@
            2. la façon de dessiner une fraction
            3. la fabrique d'exercices
            4. le chef d'orchestre, qui lance tout
+           5. l'installation sur le téléphone (bonus)
          Ils sont tout en bas pour que la page existe déjà quand ils
          se mettent en route. -->
     <script src="js/1-outils.js"></script>
     <script src="js/2-affichage.js"></script>
     <script src="js/3-exercices.js"></script>
     <script src="js/4-application.js"></script>
+    <script src="js/5-installation.js"></script>
   </body>
 </html>
