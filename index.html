@@ -1,9 +1,121 @@
-<html>
+<!DOCTYPE html>
+<html lang="fr">
+  <!-- =====================================================================
+       INDEX.HTML  —  La structure de la page : le squelette.
+
+       Trois fichiers différents travaillent ensemble :
+         - le HTML (ce fichier)  = ce qu'il y a sur la page
+         - le CSS  (dossier css) = à quoi ça ressemble
+         - le JS   (dossier js)  = ce qui se passe quand on clique
+
+       Pour ouvrir l'application : double-clic sur ce fichier.
+       ================================================================== -->
+
   <head>
-    <title>My Website</title>
+    <!-- Réglages techniques, invisibles sur la page. -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fraction Mania</title>
+
+    <!-- Les feuilles de style, dans l'ordre :
+         d'abord les couleurs, ensuite la mise en page qui les utilise. -->
+    <link rel="stylesheet" href="css/1-couleurs.css" />
+    <link rel="stylesheet" href="css/2-mise-en-page.css" />
   </head>
+
   <body>
-    <h1>Welcome to My Website</h1>
-    <p>This is a simple HTML page.</p>
+    <!-- ================= LE TITRE ================= -->
+    <header>
+      <h1>Fraction <span>Mania</span></h1>
+      <p class="sous-titre">
+        Clique sur la carte pour dérouler le calcul, étape par étape.
+      </p>
+    </header>
+
+    <!-- ================= LES RÉGLAGES =================
+         Chaque bouton porte un attribut data-mode ou data-niveau.
+         Le JavaScript lit cet attribut pour savoir quoi faire.
+         aria-pressed="true" indique le bouton actuellement choisi. -->
+    <div class="reglages">
+      <div class="groupe" role="group" aria-label="Type d'exercice">
+        <span class="etiquette">Exercice</span>
+        <button type="button" data-mode="simplifier" aria-pressed="false">
+          Simplifier
+        </button>
+        <button type="button" data-mode="somme" aria-pressed="false">
+          Somme / différence
+        </button>
+        <button type="button" data-mode="multiplication" aria-pressed="false">
+          Multiplication
+        </button>
+        <button type="button" data-mode="melange" aria-pressed="true">
+          Mélange
+        </button>
+      </div>
+
+      <div class="groupe" role="group" aria-label="Niveau de difficulté">
+        <span class="etiquette">Niveau</span>
+        <button type="button" data-niveau="facile" aria-pressed="true">
+          Facile
+        </button>
+        <button type="button" data-niveau="moyen" aria-pressed="false">
+          Moyen
+        </button>
+        <button type="button" data-niveau="costaud" aria-pressed="false">
+          Costaud
+        </button>
+      </div>
+
+      <button type="button" id="nouvelle" class="principal">
+        Nouvelle fraction
+      </button>
+    </div>
+
+    <!-- ================= LA GRANDE CARTE =================
+         C'est le gros div que l'on clique.
+         Les "id" servent au JavaScript à retrouver chaque zone.
+         tabindex="0" permet de l'atteindre au clavier avec Tab.
+         aria-live="polite" fait lire les changements par un lecteur d'écran. -->
+    <div
+      class="scene"
+      id="scene"
+      role="button"
+      tabindex="0"
+      aria-live="polite"
+      aria-label="Carte de calcul : cliquer pour afficher l'étape suivante"
+    >
+      <!-- Ces deux zones sont remplies par le JavaScript. -->
+      <div class="expr" id="expr"></div>
+      <p class="note" id="note"></p>
+
+      <!-- Le bas de la carte : progression, compteur, petit indice. -->
+      <div class="pied">
+        <span class="points" id="points" aria-hidden="true"></span>
+        <span id="compteur">Étape 1</span>
+        <span class="indice" id="indice">Clique ici ▸</span>
+      </div>
+    </div>
+
+    <!-- ================= L'AIDE ================= -->
+    <p class="aide">
+      Raccourcis : <kbd>Espace</kbd> ou <kbd>Entrée</kbd> = étape suivante ·
+      <kbd>←</kbd> = étape précédente · <kbd>N</kbd> = nouvelle fraction.
+      Les facteurs utiles sont écrits
+      <span class="hl">en bleu, en gras et soulignés</span> pour rester
+      repérables même sans distinguer les couleurs.
+    </p>
+
+    <!-- ================= LES SCRIPTS =================
+         L'ORDRE EST IMPORTANT : chaque fichier utilise le précédent.
+           1. les outils de maths (pgcd, ppcm...)
+           2. la façon de dessiner une fraction
+           3. la fabrique d'exercices
+           4. le chef d'orchestre, qui lance tout
+         Ils sont tout en bas pour que la page existe déjà quand ils
+         se mettent en route. -->
+    <script src="js/1-outils.js"></script>
+    <script src="js/2-affichage.js"></script>
+    <script src="js/3-exercices.js"></script>
+    <script src="js/4-application.js"></script>
   </body>
 </html>

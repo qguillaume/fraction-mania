@@ -1,0 +1,328 @@
+/* =======================================================================
+   2-MISE-EN-PAGE.CSS  —  La forme, la taille et la position des éléments.
+
+   Ce fichier ne contient AUCUNE couleur écrite en clair : il utilise
+   seulement les noms rangés dans 1-couleurs.css, avec var(--nom).
+
+   Le fichier est découpé en 5 parties :
+     A. Réglages généraux de la page
+     B. Le titre et les boutons du haut
+     C. LA GRANDE CARTE que l'on clique
+     D. Les fractions (numérateur au-dessus, trait, dénominateur en dessous)
+     E. Le bas de la carte et l'aide
+   ======================================================================= */
+
+
+/* ============================ A. LA PAGE ============================== */
+
+/* "*" veut dire "tous les éléments".
+   box-sizing évite que les bordures fassent déborder les boîtes. */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 16px;
+  min-height: 100vh; /* 100vh = toute la hauteur de l'écran */
+  background: var(--fond);
+  color: var(--encre);
+  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+
+  /* flex = on empile les éléments les uns sous les autres, bien centrés. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px; /* espace automatique entre les éléments */
+}
+
+
+/* ==================== B. TITRE ET BOUTONS DU HAUT ===================== */
+
+header {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-wrap: wrap; /* si l'écran est étroit, ça passe à la ligne */
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+h1 {
+  margin: 0;
+  /* clamp(mini, idéal, maxi) : la taille s'adapte à la largeur de l'écran. */
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  letter-spacing: -0.5px;
+}
+
+h1 span {
+  color: var(--bleu);
+}
+
+.sous-titre {
+  margin: 0;
+  color: var(--encre-douce);
+  font-size: 1rem;
+}
+
+.reglages {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Une petite boîte qui regroupe des boutons qui vont ensemble. */
+.groupe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px;
+  background: var(--carte);
+  border: 2px solid var(--trait);
+  border-radius: 12px;
+}
+
+.groupe > .etiquette {
+  align-self: center;
+  padding: 0 6px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--encre-douce);
+}
+
+button {
+  font: inherit; /* le bouton garde la police de la page */
+  font-weight: 600;
+  color: var(--encre);
+  background: var(--carte);
+  border: 2px solid var(--trait);
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--bleu);
+}
+
+/* Le contour épais quand on navigue au clavier avec la touche Tab. */
+button:focus-visible {
+  outline: 3px solid var(--bleu);
+  outline-offset: 2px;
+}
+
+/* Le bouton actuellement choisi.
+   ATTENTION : il change de fond ET reçoit une barre épaisse en bas.
+   Deux signaux, donc reconnaissable même sans voir la couleur. */
+button[aria-pressed="true"] {
+  background: var(--fond-evidence);
+  border-color: var(--bleu);
+  box-shadow: inset 0 -4px 0 var(--bleu);
+}
+
+.principal {
+  background: var(--bleu);
+  color: #ffffff;
+  border-color: var(--bleu);
+}
+
+
+/* ======================= C. LA GRANDE CARTE ========================== */
+
+/* C'est le gros rectangle que l'on clique pour faire avancer le calcul. */
+.scene {
+  width: 100%;
+  max-width: 900px;
+  min-height: min(58vh, 460px);
+  background: var(--carte);
+  border: 4px solid var(--trait);
+  border-radius: 24px;
+  padding: 24px 20px 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  cursor: pointer;
+  user-select: none; /* évite de sélectionner le texte en cliquant vite */
+  text-align: center;
+}
+
+.scene:hover {
+  border-color: var(--ciel);
+}
+
+.scene:focus-visible {
+  outline: 4px solid var(--bleu);
+  outline-offset: 3px;
+}
+
+/* Quand le calcul est terminé, la bordure devient double ET plus épaisse :
+   on voit que c'est fini même sans distinguer le vert. */
+.scene.termine {
+  border-color: var(--vert);
+  border-style: double;
+  border-width: 8px;
+}
+
+
+/* ==================== D. LES FRACTIONS AFFICHÉES ===================== */
+
+/* La ligne complète du calcul, par exemple :  1/4 + 2/3 */
+.expr {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  font-size: clamp(2.1rem, 8vw, 4.2rem); /* très gros, bien lisible */
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* Une fraction = 3 éléments empilés verticalement :
+   le numérateur, le trait, puis le dénominateur. */
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.num,
+.den {
+  padding: 0 0.18em;
+  white-space: nowrap; /* "4 × 2" ne doit jamais être coupé en deux lignes */
+}
+
+/* Le trait de fraction. currentColor = la même couleur que le texte. */
+.bar {
+  width: 100%;
+  min-width: 1.2em;
+  height: 0.09em;
+  min-height: 4px;
+  margin: 0.1em 0;
+  background: currentColor;
+  border-radius: 999px;
+}
+
+.entier {
+  padding: 0 0.1em;
+}
+
+/* Les signes +  −  × entre deux fractions. */
+.op {
+  color: var(--orange);
+  font-weight: 800;
+  padding: 0 0.1em;
+}
+
+/* LA MISE EN ÉVIDENCE (le fameux "× 2").
+   Quatre signaux en même temps :
+     1. la couleur bleue
+     2. un fond pâle
+     3. le texte est déjà en gras
+     4. un soulignement en pointillés
+   Même sans voir le bleu, on repère tout de suite le morceau important. */
+.hl {
+  color: var(--bleu);
+  background: var(--fond-evidence);
+  border-radius: 8px;
+  padding: 0 0.12em;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.12em;
+}
+
+/* Le résultat final passe en vert, en plus de la bordure double. */
+.scene.termine .expr .frac,
+.scene.termine .expr .entier {
+  color: var(--vert);
+}
+
+
+/* ==================== E. BAS DE LA CARTE ET AIDE ===================== */
+
+/* La phrase d'explication sous le calcul. */
+.note {
+  font-size: clamp(1rem, 2.6vw, 1.35rem);
+  color: var(--encre-douce);
+  max-width: 40ch; /* 40 caractères de large : plus facile à lire */
+  min-height: 2.6em; /* hauteur réservée, pour que ça ne saute pas */
+}
+
+.note strong {
+  color: var(--encre);
+}
+
+.pied {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 2px dashed var(--trait);
+  padding-top: 12px;
+  color: var(--encre-douce);
+  font-size: 0.95rem;
+}
+
+/* Les petits ronds qui montrent où on en est dans le calcul. */
+.points {
+  display: flex;
+  gap: 8px;
+}
+
+.point {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--encre-douce);
+  border-radius: 50%;
+}
+
+.point.faite {
+  background: var(--bleu);
+  border-color: var(--bleu);
+}
+
+/* L'étape en cours a un halo autour : sa FORME est différente. */
+.point.active {
+  background: var(--bleu);
+  border-color: var(--bleu);
+  box-shadow: 0 0 0 4px var(--fond-evidence);
+}
+
+.indice {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.aide {
+  width: 100%;
+  max-width: 900px;
+  color: var(--encre-douce);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* <kbd> sert à afficher une touche du clavier, comme Espace. */
+kbd {
+  font: inherit;
+  font-size: 0.85em;
+  border: 1px solid var(--trait);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  padding: 1px 6px;
+  background: var(--carte);
+  color: var(--encre);
+}

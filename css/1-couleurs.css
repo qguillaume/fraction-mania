@@ -1,0 +1,60 @@
+/* =======================================================================
+   1-COULEURS.CSS  —  Toutes les couleurs de l'application sont ici.
+
+   Tu veux changer une couleur ? C'est le SEUL fichier à modifier.
+   Chaque couleur a un nom (on appelle ça une "variable").
+   Ailleurs dans le site, on écrit par exemple  color: var(--bleu);
+   et le navigateur va chercher la valeur écrite ici.
+
+   POURQUOI CES COULEURS-LÀ ?
+   Elles viennent de la palette "Okabe-Ito", inventée exprès pour rester
+   distinguables quand on est daltonien. Mais une règle est encore plus
+   importante que le choix des couleurs :
+
+        >> LA COULEUR N'EST JAMAIS LA SEULE INFORMATION <<
+
+   Ce qui est important est AUSSI en gras, souligné, sur un fond clair
+   ou entouré d'un cadre. Comme ça, même sans voir la couleur, on
+   comprend. Si tu ajoutes quelque chose, garde cette règle.
+   ======================================================================= */
+
+/* :root veut dire "toute la page". On y range nos noms de couleurs. */
+:root {
+  /* --- Le décor --- */
+  --fond: #f7f7f5;        /* le fond de la page (blanc cassé) */
+  --carte: #ffffff;       /* le fond des cartes et des boutons */
+  --encre: #101418;       /* la couleur du texte principal (presque noir) */
+  --encre-douce: #55606b; /* le texte des explications (gris) */
+  --trait: #c9d1d9;       /* les bordures et les traits */
+
+  /* --- Les couleurs qui portent un sens --- */
+  --bleu: #0072b2;   /* les facteurs que l'on met en évidence (le "× 2") */
+  --orange: #d55e00; /* les signes de l'opération : +  −  × */
+  --vert: #009e73;   /* la bonne réponse, à la fin du calcul */
+  --ciel: #56b4e9;   /* petites touches douces (survol de la souris) */
+
+  /* --- Les fonds pâles (le 2e signal, en plus de la couleur) --- */
+  --fond-evidence: #dceaf5; /* derrière un facteur mis en avant */
+  --fond-reussite: #d9f0e7; /* derrière le résultat final */
+}
+
+/* Si l'ordinateur est réglé en mode sombre, on remplace les valeurs.
+   Les noms ne changent pas, donc le reste du site fonctionne pareil. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fond: #12161a;
+    --carte: #1b2127;
+    --encre: #f2f5f7;
+    --encre-douce: #a9b4bf;
+    --trait: #38424c;
+
+    /* Sur fond sombre, on éclaircit les couleurs pour garder du contraste. */
+    --bleu: #56b4e9;
+    --orange: #ff9d4d;
+    --vert: #46d6ab;
+    --ciel: #8fd3f4;
+
+    --fond-evidence: #123449;
+    --fond-reussite: #10382e;
+  }
+}
