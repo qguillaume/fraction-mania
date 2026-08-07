@@ -12,10 +12,16 @@
      {
        calcul: [ ...les boîtes à dessiner... ],
        explication: "la phrase affichée sous le calcul",
-       termine: true   (seulement pour la toute dernière étape)
+       termine: true,              (seulement pour la toute dernière étape)
+       valeur: { haut: 3, bas: 4 } (seulement pour le RÉSULTAT FINAL)
      }
 
    Un clic sur la carte = on passe à l'étape suivante de la liste.
+
+   À quoi sert "valeur" ? Quand une étape en porte une, l'application
+   dessine en dessous une DEMI-DROITE GRADUÉE et y place le résultat.
+   On ne la met donc que sur l'étape qui montre la fraction irréductible :
+   tant qu'on peut encore simplifier, ce n'est pas le nombre final.
 
    Le "niveau" ("facile", "moyen" ou "costaud") sert à choisir des
    nombres plus ou moins gros.
@@ -88,7 +94,8 @@ function genererSimplification(niveau) {
       explication:
         "On barre le <strong>× " + facteur + "</strong> en haut et en bas :" +
         " il reste " + haut + "/" + bas + ", la fraction irréductible.",
-      termine: true
+      termine: true,
+      valeur: { haut: haut, bas: bas }
     }
   ];
 
@@ -99,7 +106,8 @@ function genererSimplification(niveau) {
       explication:
         "Et " + haut + "/" + bas + " vaut exactement <strong>" +
         (haut / bas) + "</strong>.",
-      termine: true
+      termine: true,
+      valeur: { haut: haut / bas, bas: 1 }
     });
   }
 
@@ -258,7 +266,8 @@ function genererSommeDifference(niveau) {
         nouveauHaut1 + " " + symbole + " " + nouveauHaut2 +
         " = <strong>0</strong> : les deux fractions étaient égales," +
         " il ne reste rien.",
-      termine: true
+      termine: true,
+      valeur: { haut: 0, bas: 1 }
     });
 
     return etapes;
@@ -359,7 +368,10 @@ function ajouterResultatEtSimplification(etapes, haut, bas, debut) {
         ? debut + "Attention, cette fraction peut encore être simplifiée !"
         : debut + "La fraction est déjà irréductible.",
     // Si le PGCD vaut 1, on ne peut plus rien simplifier : c'est fini.
-    termine: facteur === 1
+    termine: facteur === 1,
+    // ...et dans ce cas seulement, c'est le nombre à placer sur la
+    // demi-droite. Sinon on attend la simplification, deux étapes plus bas.
+    valeur: facteur === 1 ? { haut: haut, bas: bas } : null
   });
 
   if (facteur > 1) {
@@ -386,7 +398,8 @@ function ajouterResultatEtSimplification(etapes, haut, bas, debut) {
             " <strong>" + hautFinal + "</strong>."
           : "On simplifie par " + facteur + " : le résultat est" +
             " <strong>" + hautFinal + "/" + basFinal + "</strong>.",
-      termine: true
+      termine: true,
+      valeur: { haut: hautFinal, bas: basFinal }
     });
   }
 }

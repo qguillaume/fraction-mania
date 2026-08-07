@@ -4,12 +4,13 @@
    Ce fichier ne contient AUCUNE couleur écrite en clair : il utilise
    seulement les noms rangés dans 1-couleurs.css, avec var(--nom).
 
-   Le fichier est découpé en 5 parties :
+   Le fichier est découpé en 6 parties :
      A. Réglages généraux de la page
      B. Le titre et les boutons du haut
      C. LA GRANDE CARTE que l'on clique
      D. Les fractions (numérateur au-dessus, trait, dénominateur en dessous)
-     E. Le bas de la carte et l'aide
+     E. La demi-droite graduée du résultat final
+     F. Le bas de la carte et l'aide
    ======================================================================= */
 
 
@@ -57,7 +58,7 @@ h1 {
 }
 
 h1 span {
-  color: var(--bleu);
+  color: var(--orange);
 }
 
 .sous-titre {
@@ -107,12 +108,12 @@ button {
 }
 
 button:hover {
-  border-color: var(--bleu);
+  border-color: var(--orange);
 }
 
 /* Le contour épais quand on navigue au clavier avec la touche Tab. */
 button:focus-visible {
-  outline: 3px solid var(--bleu);
+  outline: 3px solid var(--orange);
   outline-offset: 2px;
 }
 
@@ -120,29 +121,31 @@ button:focus-visible {
    ATTENTION : il change de fond ET reçoit une barre épaisse en bas.
    Deux signaux, donc reconnaissable même sans voir la couleur. */
 button[aria-pressed="true"] {
-  background: var(--fond-evidence);
-  border-color: var(--bleu);
-  box-shadow: inset 0 -4px 0 var(--bleu);
+  background: var(--fond-orange);
+  border-color: var(--orange);
+  box-shadow: inset 0 -4px 0 var(--orange);
 }
 
+/* Le texte est volontairement très foncé : sur un aplat orange vif, du
+   blanc manquerait de contraste. */
 .principal {
-  background: var(--bleu);
-  color: #ffffff;
-  border-color: var(--bleu);
+  background: var(--orange);
+  color: #21140a;
+  border-color: var(--orange);
 }
 
-/* Le bouton "Installer l'appli". Il est vert comme une réussite, et
-   entouré de pointillés pour se distinguer des autres même sans voir
-   la couleur. Il reste caché tant que le téléphone ne propose pas
-   l'installation (attribut hidden dans le HTML). */
+/* Le bouton "Installer l'appli". Il est orange comme le reste, mais
+   entouré de POINTILLÉS : c'est sa forme, et non sa couleur, qui le
+   distingue du bouton plein "Nouvelle fraction". Il reste caché tant
+   que le téléphone ne propose pas l'installation (attribut hidden). */
 .installer {
   border-style: dashed;
-  border-color: var(--vert);
-  background: var(--fond-reussite);
+  border-color: var(--orange);
+  background: var(--fond-orange);
 }
 
 .installer:hover {
-  border-color: var(--vert);
+  border-color: var(--orange);
 }
 
 
@@ -170,18 +173,18 @@ button[aria-pressed="true"] {
 }
 
 .scene:hover {
-  border-color: var(--ciel);
+  border-color: var(--orange-doux);
 }
 
 .scene:focus-visible {
-  outline: 4px solid var(--bleu);
+  outline: 4px solid var(--orange);
   outline-offset: 3px;
 }
 
 /* Quand le calcul est terminé, la bordure devient double ET plus épaisse :
-   on voit que c'est fini même sans distinguer le vert. */
+   on voit que c'est fini même sans distinguer la couleur. */
 .scene.termine {
-  border-color: var(--vert);
+  border-color: var(--reussite);
   border-style: double;
   border-width: 8px;
 }
@@ -240,14 +243,15 @@ button[aria-pressed="true"] {
 
 /* LA MISE EN ÉVIDENCE (le fameux "× 2").
    Quatre signaux en même temps :
-     1. la couleur bleue
+     1. la couleur orange
      2. un fond pâle
      3. le texte est déjà en gras
      4. un soulignement en pointillés
-   Même sans voir le bleu, on repère tout de suite le morceau important. */
+   Même sans voir la couleur, on repère tout de suite le morceau
+   important. */
 .hl {
-  color: var(--bleu);
-  background: var(--fond-evidence);
+  color: var(--orange);
+  background: var(--fond-orange);
   border-radius: 8px;
   padding: 0 0.12em;
   text-decoration: underline;
@@ -256,14 +260,145 @@ button[aria-pressed="true"] {
   text-underline-offset: 0.12em;
 }
 
-/* Le résultat final passe en vert, en plus de la bordure double. */
+/* Le résultat final change de couleur, en plus de la bordure double. */
 .scene.termine .expr .frac,
 .scene.termine .expr .entier {
-  color: var(--vert);
+  color: var(--reussite);
 }
 
 
-/* ==================== E. BAS DE LA CARTE ET AIDE ===================== */
+/* ================= E. LA DEMI-DROITE GRADUÉE ========================= */
+
+/* Le bloc entier : le dessin, plus la petite phrase d'encadrement.
+   Il est caché pendant tout le calcul (attribut hidden dans le HTML) et
+   n'apparaît qu'à la dernière étape. */
+.axe {
+  width: 100%;
+  max-width: 460px;
+}
+
+.axe[hidden] {
+  display: none;
+}
+
+/* Le dessin SVG s'étire sur toute la largeur disponible ; sa hauteur
+   suit automatiquement, sans jamais se déformer. */
+.axe-dessin {
+  width: 100%;
+  height: auto;
+}
+
+/* La ligne horizontale et sa flèche.
+   fill: none est indispensable : sans ça, le navigateur remplirait
+   l'intérieur du triangle de la flèche au lieu de n'en tracer que
+   les côtés. */
+.axe-ligne,
+.axe-fleche {
+  stroke: var(--orange-doux);
+  stroke-width: 2;
+  fill: none;
+}
+
+.axe-fleche {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* LES GRADUATIONS : trois tailles, pour trois rôles.
+   C'est leur TAILLE qui les distingue, jamais leur couleur.
+     - les entiers      : les plus grandes et les plus épaisses
+     - les demis        : intermédiaires, le point de repère du milieu
+     - les petites parts: les plus fines, une par part de la fraction */
+.axe-entier {
+  stroke: var(--orange-doux);
+  stroke-width: 2.5;
+}
+
+.axe-demi {
+  stroke: var(--orange-doux);
+  stroke-width: 2;
+}
+
+.axe-petite {
+  stroke: var(--orange-doux);
+  stroke-width: 1.5;
+  opacity: 0.55; /* estompées : elles servent à compter, pas à se repérer */
+}
+
+/* Dans un dessin SVG, la couleur d'un texte se règle avec "fill"
+   (remplissage) et non avec "color" comme dans le reste de la page.
+   text-anchor: middle centre le texte sur sa position x. */
+/* Les tailles sont exprimées dans les unités du dessin (viewBox), pas en
+   pixels d'écran : elles rétrécissent donc avec lui sur un téléphone.
+   C'est pour ça qu'elles paraissent grandes ici. */
+.axe-nombre {
+  fill: var(--orange-doux);
+  font-size: 22px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+/* Le "1/2" écrit sous la graduation du milieu. Plus petit que les
+   entiers : c'est un repère d'appoint, il ne doit pas leur voler
+   la vedette. */
+.axe-demi-nombre {
+  fill: var(--orange-doux);
+  font-size: 16px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+/* LE CHEMIN PARCOURU depuis zéro jusqu'à la fraction.
+   Le trait change de couleur ET devient nettement plus épais : on voit
+   la quantité même sans distinguer la couleur. */
+.axe-parcours {
+  stroke: var(--reussite);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+/* LE REPÈRE qui montre la fraction. Trois signaux à la fois :
+     1. la couleur du résultat
+     2. la FORME : un trait vertical et une pointe triangulaire, que
+        rien d'autre dans le dessin n'a
+     3. le nombre lui-même, écrit juste au-dessus */
+.axe-repere {
+  stroke: var(--reussite);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+
+.axe-pointe {
+  fill: var(--reussite);
+}
+
+/* Le trait de fraction de l'étiquette (le "—" entre 3 et 4). */
+.axe-barre {
+  stroke: var(--reussite);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.axe-etiquette {
+  fill: var(--reussite);
+  font-size: 26px;
+  font-weight: 800;
+  text-anchor: middle;
+}
+
+/* La phrase "3/4 est entre 0 et 1", juste sous le dessin. */
+.axe-legende {
+  margin: 4px 0 0;
+  font-size: clamp(0.9rem, 2.2vw, 1.05rem);
+  color: var(--encre-douce);
+}
+
+.axe-legende strong {
+  color: var(--encre);
+}
+
+
+/* ==================== F. BAS DE LA CARTE ET AIDE ===================== */
 
 /* La phrase d'explication sous le calcul. */
 .note {
@@ -289,7 +424,10 @@ button[aria-pressed="true"] {
   font-size: 0.95rem;
 }
 
-/* Les petits ronds qui montrent où on en est dans le calcul. */
+/* Les petits ronds qui montrent où on en est dans le calcul.
+   SEULE PARTIE BLEUE DE L'APPLICATION, volontairement : ils ne disent
+   pas "c'est important", ils disent "tu en es là". Un rôle à part
+   mérite une couleur à part. */
 .points {
   display: flex;
   gap: 8px;
@@ -311,7 +449,7 @@ button[aria-pressed="true"] {
 .point.active {
   background: var(--bleu);
   border-color: var(--bleu);
-  box-shadow: 0 0 0 4px var(--fond-evidence);
+  box-shadow: 0 0 0 4px var(--fond-bleu);
 }
 
 .indice {

@@ -112,6 +112,13 @@
       <div class="expr" id="expr"></div>
       <p class="note" id="note"></p>
 
+      <!-- LA DEMI-DROITE GRADUÉE.
+           Elle reste cachée ("hidden") pendant tout le calcul, et
+           n'apparaît qu'à la toute fin, quand le résultat ne peut plus
+           être simplifié : elle montre alors OÙ se place ce nombre.
+           C'est le JavaScript qui la dessine et enlève le "hidden". -->
+      <div class="axe" id="axe" hidden></div>
+
       <!-- Le bas de la carte : progression, compteur, petit indice. -->
       <div class="pied">
         <span class="points" id="points" aria-hidden="true"></span>
@@ -145,7 +152,7 @@
     </p>
     <p class="aide">
       Les facteurs utiles sont écrits
-      <span class="hl">en bleu, en gras et soulignés</span> pour rester
+      <span class="hl">en orange, en gras et soulignés</span> pour rester
       repérables même sans distinguer les couleurs.
     </p>
 

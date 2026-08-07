@@ -37,17 +37,44 @@
   --encre-douce: #a9b4bf; /* le texte des explications (gris clair) */
   --trait: #38424c;       /* les bordures et les traits */
 
-  /* --- Les couleurs qui portent un sens ---
-     Elles sont volontairement claires : sur un fond sombre, une couleur
-     foncée ne se verrait pas. C'est ça, avoir assez de "contraste". */
-  --bleu: #56b4e9;   /* les facteurs que l'on met en évidence (le "× 2") */
-  --orange: #ff9d4d; /* les signes de l'opération : +  −  × */
-  --vert: #46d6ab;   /* la bonne réponse, à la fin du calcul */
-  --ciel: #8fd3f4;   /* petites touches douces (survol de la souris) */
+  /* =====================================================================
+     L'ORANGE : LA COULEUR DE TOUTE L'APPLICATION
 
-  /* --- Les fonds pâles (le 2e signal, en plus de la couleur) --- */
-  --fond-evidence: #123449; /* derrière un facteur mis en avant */
-  --fond-reussite: #10382e; /* derrière le résultat final */
+     POURQUOI DE L'ORANGE, ET PAS DU VERT NI DU BLEU ?
+     Le vert est le réflexe habituel pour dire "c'est bon". Mais c'est
+     justement la teinte la plus risquée pour la forme la plus courante
+     de daltonisme, le rouge-vert : sur un fond sombre, un vert-turquoise
+     se confond avec du gris, et le sens est perdu. L'orange, lui, reste
+     franchement visible.
+
+     Et on garde la règle : la couleur n'est jamais le seul signal.
+     La carte terminée a AUSSI une bordure double et plus épaisse, le
+     bouton choisi a AUSSI une barre sous lui, et le repère de la
+     demi-droite a AUSSI une pointe triangulaire et son nombre écrit
+     juste au-dessus.
+     ===================================================================== */
+
+  --orange: #ff9d4d; /* l'orange principal : tout ce qui compte */
+  --orange-doux: #c9803f; /* un orange assourdi, pour ce qui reste en
+                             retrait : la demi-droite et ses graduations.
+                             Le trait du résultat, lui, est en --orange
+                             vif ET plus épais : il ressort donc deux
+                             fois, par la teinte et par l'épaisseur. */
+  --fond-orange: #43260f; /* le fond pâle derrière un élément orange */
+
+  /* --- LE BLEU : réservé aux points de progression ---
+     C'est la seule couleur qui n'est pas orange dans l'application.
+     Justement : les points ne disent pas "c'est important", ils disent
+     "tu en es là". Une couleur à part pour un rôle à part. Et le bleu
+     ne pose aucun problème de daltonisme rouge-vert. */
+  --bleu: #56b4e9;
+  --fond-bleu: #123449; /* le halo autour du point en cours */
+
+  /* --- Un nom de rôle, pour dire ce que ça VEUT DIRE ---
+     La bordure de la carte terminée, le résultat écrit en gros et le
+     repère de la demi-droite s'en servent tous les trois. Change cette
+     ligne et les trois suivent. */
+  --reussite: var(--orange);
 }
 
 
@@ -59,9 +86,10 @@
 
      1. remettre les couleurs claires dans :root ci-dessus, par exemple
         --fond: #f7f7f5;  --carte: #ffffff;  --encre: #101418;
-        --encre-douce: #55606b;  --trait: #c9d1d9;  --bleu: #0072b2;
-        --orange: #d55e00;  --vert: #009e73;  --ciel: #56b4e9;
-        --fond-evidence: #dceaf5;  --fond-reussite: #d9f0e7;
+        --encre-douce: #55606b;  --trait: #c9d1d9;
+        --orange: #d55e00;  --orange-doux: #a34800;
+        --fond-orange: #fbe4d5;
+        --bleu: #0072b2;  --fond-bleu: #dceaf5;
 
      2. remplacer  color-scheme: dark;  par  color-scheme: light dark;
 

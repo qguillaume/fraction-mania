@@ -20,6 +20,29 @@ Sous la carte, deux boutons rattrapent une tape malheureuse :
 Un bouton grisé veut dire qu'il n'y a plus rien derrière. Sur ordinateur,
 la touche <kbd>←</kbd> fait la même chose que « Étape précédente ».
 
+## La demi-droite graduée
+
+À la **dernière étape**, quand le résultat ne peut plus être simplifié,
+une demi-droite graduée apparaît sous le calcul et y place le nombre
+trouvé :
+
+- l'unité est découpée en autant de parts que le dénominateur (pour 3/4,
+  quatre parts), donc on peut **compter les parts** jusqu'au repère ;
+- une graduation plus grande marque chaque **demi**, avec « 1/2 » écrit
+  sous la première : c'est le point d'appui du milieu, celui qui répond
+  à « est-ce plus grand ou plus petit qu'un demi ? » ;
+- le trajet depuis 0 est tracé en orange vif et en épais : on voit la
+  **quantité**, pas seulement la position ;
+- une phrase donne l'**encadrement** : « 3/4 est entre 0 et 1 ».
+
+Les graduations se distinguent par leur **taille**, jamais par leur
+couleur : entiers (les plus grandes), demis (intermédiaires), parts de
+la fraction (les plus fines).
+
+Elle ne s'affiche qu'à la fin, et disparaît si on revient en arrière.
+Quand le dénominateur est trop grand (au-delà de 30 parts à dessiner),
+les petites graduations sont omises : ça deviendrait illisible.
+
 ## Les trois types d'exercices
 
 | Bouton | Exemple | Ce qu'on apprend |
@@ -58,7 +81,8 @@ css/1-couleurs.css      TOUTES les couleurs (le seul fichier à modifier
 css/2-mise-en-page.css  les tailles, les positions, les formes
 
 js/1-outils.js          les maths de base : pgcd, ppcm, hasard
-js/2-affichage.js       comment dessiner une fraction sur deux lignes
+js/2-affichage.js       comment dessiner une fraction sur deux lignes,
+                        et la demi-droite graduée du résultat final
 js/3-exercices.js       la fabrique des trois types d'exercices
 js/4-application.js     le chef d'orchestre : clics, clavier, boutons
 js/5-installation.js    l'installation sur le téléphone
@@ -90,11 +114,40 @@ fond pâle ou entouré d'un cadre. Les couleurs viennent de la palette
 « Okabe-Ito », conçue pour rester distinguables. Si tu ajoutes quelque
 chose, garde cette règle.
 
+### Toute l'application est orange
+
+Le vert est le réflexe habituel pour dire « c'est bon ». Mais c'est
+justement la teinte la plus risquée pour la forme la plus courante de
+daltonisme, le rouge-vert : sur fond sombre, un vert-turquoise se
+confond avec du gris, et le sens est perdu. L'orange reste franchement
+visible.
+
+Dans `css/1-couleurs.css`, trois teintes suffisent :
+
+| Variable | À quoi ça sert |
+| --- | --- |
+| `--orange` | tout ce qui compte : titre, boutons, résultat, repère |
+| `--orange-doux` | ce qui reste en retrait : la droite et ses graduations |
+| `--fond-orange` | le fond pâle derrière un élément orange |
+
+`--reussite` est un simple **nom de rôle** qui pointe vers `--orange` :
+la bordure de la carte terminée, le résultat en gros et le repère de la
+demi-droite s'en servent tous les trois.
+
+**Le bleu ne subsiste qu'à un seul endroit** : les points de progression
+en bas de la carte. C'est voulu — ils ne disent pas « c'est important »,
+ils disent « tu en es là ». Un rôle à part mérite une couleur à part, et
+le bleu ne pose aucun problème de daltonisme rouge-vert.
+
 ## Envie de bricoler le code ?
 
 Quelques idées faciles pour commencer :
 
-- changer le bleu de mise en évidence dans `css/1-couleurs.css` ;
+- changer la teinte de toute l'appli : une seule ligne, `--orange` dans
+  `css/1-couleurs.css` ;
 - rendre le niveau « Costaud » plus dur : dans `js/3-exercices.js`,
   augmenter `denominateurMax` ;
-- écrire une nouvelle phrase d'explication dans `js/3-exercices.js`.
+- écrire une nouvelle phrase d'explication dans `js/3-exercices.js` ;
+- afficher la demi-droite plus tôt : il suffit d'ajouter un
+  `valeur: { haut: ..., bas: ... }` à n'importe quelle étape de
+  `js/3-exercices.js`.

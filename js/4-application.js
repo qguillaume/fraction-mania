@@ -50,6 +50,7 @@ function exerciceAffiche() {
 const zoneCarte = document.getElementById("scene");
 const zoneCalcul = document.getElementById("expr");
 const zoneExplication = document.getElementById("note");
+const zoneDemiDroite = document.getElementById("axe");
 const zonePoints = document.getElementById("points");
 const zoneCompteur = document.getElementById("compteur");
 const zoneIndice = document.getElementById("indice");
@@ -109,7 +110,22 @@ function afficher() {
   //    et l'enlève sinon.
   zoneCarte.classList.toggle("termine", etape.termine === true || estLaDerniere);
 
-  // 3) Les petits ronds de progression, un par étape.
+  /* 3) La demi-droite graduée.
+        Seules les étapes qui montrent le RÉSULTAT FINAL portent une
+        "valeur" (voir 3-exercices.js). Sur toutes les autres, on vide la
+        zone et on la cache : la carte reste aussi sobre qu'avant. */
+  if (etape.valeur) {
+    zoneDemiDroite.innerHTML = dessinerDemiDroite(
+      etape.valeur.haut,
+      etape.valeur.bas
+    );
+    zoneDemiDroite.hidden = false;
+  } else {
+    zoneDemiDroite.innerHTML = "";
+    zoneDemiDroite.hidden = true;
+  }
+
+  // 4) Les petits ronds de progression, un par étape.
   let htmlDesPoints = "";
 
   for (let i = 0; i < exercice.etapes.length; i++) {
@@ -126,7 +142,7 @@ function afficher() {
 
   zonePoints.innerHTML = htmlDesPoints;
 
-  // 4) Le compteur et le petit texte "clique ici".
+  // 5) Le compteur et le petit texte "clique ici".
   zoneCompteur.textContent =
     "Étape " + (exercice.etape + 1) + " / " + exercice.etapes.length;
 
@@ -134,7 +150,7 @@ function afficher() {
     ? "✔ Terminé — clique pour une nouvelle ▸"
     : "Clique ici ▸";
 
-  // 5) Les deux boutons de retour : grisés s'il n'y a rien derrière.
+  // 6) Les deux boutons de retour : grisés s'il n'y a rien derrière.
   boutonEtapePrecedente.disabled = exercice.etape === 0;
   boutonFractionPrecedente.disabled = etat.numeroExercice === 0;
 }
