@@ -6,6 +6,11 @@
    Ailleurs dans le site, on écrit par exemple  color: var(--bleu);
    et le navigateur va chercher la valeur écrite ici.
 
+   L'APPLI EST TOUJOURS EN MODE SOMBRE.
+   Elle ne suit pas le réglage du téléphone : elle reste sombre en
+   permanence, de jour comme de nuit. (Voir tout en bas si tu veux
+   revenir au thème qui s'adapte automatiquement.)
+
    POURQUOI CES COULEURS-LÀ ?
    Elles viennent de la palette "Okabe-Ito", inventée exprès pour rester
    distinguables quand on est daltonien. Mais une règle est encore plus
@@ -20,41 +25,53 @@
 
 /* :root veut dire "toute la page". On y range nos noms de couleurs. */
 :root {
-  /* --- Le décor --- */
-  --fond: #f7f7f5;        /* le fond de la page (blanc cassé) */
-  --carte: #ffffff;       /* le fond des cartes et des boutons */
-  --encre: #101418;       /* la couleur du texte principal (presque noir) */
-  --encre-douce: #55606b; /* le texte des explications (gris) */
-  --trait: #c9d1d9;       /* les bordures et les traits */
+  /* color-scheme prévient le navigateur que la page est sombre. Grâce à
+     cette ligne, il dessine lui aussi en sombre les barres de défilement
+     et les menus, et il n'y a pas d'éclair blanc au démarrage. */
+  color-scheme: dark;
 
-  /* --- Les couleurs qui portent un sens --- */
-  --bleu: #0072b2;   /* les facteurs que l'on met en évidence (le "× 2") */
-  --orange: #d55e00; /* les signes de l'opération : +  −  × */
-  --vert: #009e73;   /* la bonne réponse, à la fin du calcul */
-  --ciel: #56b4e9;   /* petites touches douces (survol de la souris) */
+  /* --- Le décor --- */
+  --fond: #12161a;        /* le fond de la page (presque noir) */
+  --carte: #1b2127;       /* le fond des cartes et des boutons */
+  --encre: #f2f5f7;       /* la couleur du texte principal (presque blanc) */
+  --encre-douce: #a9b4bf; /* le texte des explications (gris clair) */
+  --trait: #38424c;       /* les bordures et les traits */
+
+  /* --- Les couleurs qui portent un sens ---
+     Elles sont volontairement claires : sur un fond sombre, une couleur
+     foncée ne se verrait pas. C'est ça, avoir assez de "contraste". */
+  --bleu: #56b4e9;   /* les facteurs que l'on met en évidence (le "× 2") */
+  --orange: #ff9d4d; /* les signes de l'opération : +  −  × */
+  --vert: #46d6ab;   /* la bonne réponse, à la fin du calcul */
+  --ciel: #8fd3f4;   /* petites touches douces (survol de la souris) */
 
   /* --- Les fonds pâles (le 2e signal, en plus de la couleur) --- */
-  --fond-evidence: #dceaf5; /* derrière un facteur mis en avant */
-  --fond-reussite: #d9f0e7; /* derrière le résultat final */
+  --fond-evidence: #123449; /* derrière un facteur mis en avant */
+  --fond-reussite: #10382e; /* derrière le résultat final */
 }
 
-/* Si l'ordinateur est réglé en mode sombre, on remplace les valeurs.
-   Les noms ne changent pas, donc le reste du site fonctionne pareil. */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --fond: #12161a;
-    --carte: #1b2127;
-    --encre: #f2f5f7;
-    --encre-douce: #a9b4bf;
-    --trait: #38424c;
 
-    /* Sur fond sombre, on éclaircit les couleurs pour garder du contraste. */
-    --bleu: #56b4e9;
-    --orange: #ff9d4d;
-    --vert: #46d6ab;
-    --ciel: #8fd3f4;
+/* =======================================================================
+   POUR REVENIR AU THÈME QUI S'ADAPTE TOUT SEUL
 
-    --fond-evidence: #123449;
-    --fond-reussite: #10382e;
-  }
-}
+   Si un jour tu préfères que l'appli soit claire le jour et sombre la
+   nuit, en suivant le réglage du téléphone, il faut :
+
+     1. remettre les couleurs claires dans :root ci-dessus, par exemple
+        --fond: #f7f7f5;  --carte: #ffffff;  --encre: #101418;
+        --encre-douce: #55606b;  --trait: #c9d1d9;  --bleu: #0072b2;
+        --orange: #d55e00;  --vert: #009e73;  --ciel: #56b4e9;
+        --fond-evidence: #dceaf5;  --fond-reussite: #d9f0e7;
+
+     2. remplacer  color-scheme: dark;  par  color-scheme: light dark;
+
+     3. remettre en dessous le bloc qui redonne les couleurs sombres
+        quand l'appareil est réglé en sombre :
+
+          @media (prefers-color-scheme: dark) {
+            :root { ...les couleurs sombres... }
+          }
+
+     4. et dans index.html, remettre les deux lignes theme-color
+        (une pour le mode clair, une pour le mode sombre).
+   ======================================================================= */
