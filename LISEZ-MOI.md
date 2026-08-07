@@ -118,7 +118,21 @@ on modifie quelque chose, il faut leur dire que la copie est périmée :
 devient `fraction-mania-v2`).
 
 Sans ça, l'ancienne version reste affichée sur les appareils qui ont
-déjà installé l'appli.
+déjà installé l'appli — et on peut même se retrouver avec un mélange :
+la nouvelle page, mais l'ancien code derrière.
+
+Une fois le numéro monté, la mise à jour s'applique **toute seule** au
+lancement suivant : `js/5-installation.js` détecte le changement et
+recharge la page une fois, pour que tout vienne de la même version.
+
+### Si un appareil semble bloqué sur une vieille version
+
+C'est qu'il n'a pas encore vu le nouveau numéro. Dans l'ordre :
+
+1. fermer complètement l'appli (pas juste la réduire) et la rouvrir ;
+2. sur ordinateur : <kbd>Ctrl</kbd>+<kbd>Maj</kbd>+<kbd>R</kbd> ;
+3. en dernier recours, Android : appui long sur l'icône → Infos sur
+   l'appli → Stockage → Effacer les données.
 
 ## La règle importante pour les couleurs
 

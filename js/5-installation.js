@@ -4,7 +4,8 @@
    Deux choses ici :
 
      1. réveiller le service worker (sw.js), celui qui garde une copie
-        de l'appli pour qu'elle marche sans internet ;
+        de l'appli pour qu'elle marche sans internet — et faire en sorte
+        qu'une nouvelle version s'applique toute seule ;
 
      2. afficher un bouton "Installer l'appli" quand le téléphone
         propose de l'ajouter à l'écran d'accueil.
@@ -26,6 +27,11 @@ const adresseSecurisee =
   location.protocol === "https:" || location.hostname === "localhost";
 
 if ("serviceWorker" in navigator && adresseSecurisee) {
+  /* Y avait-il DÉJÀ une copie de l'appli en place en arrivant ?
+     On le note tout de suite, avant que le nouveau service worker ne
+     s'installe : la réponse sert juste en dessous. */
+  const copieDejaEnPlace = navigator.serviceWorker.controller !== null;
+
   /* On attend que la page soit entièrement chargée : le service worker
      est un bonus, il ne doit pas ralentir l'affichage du premier calcul. */
   window.addEventListener("load", function () {
@@ -33,6 +39,35 @@ if ("serviceWorker" in navigator && adresseSecurisee) {
       // En cas de problème, on le note dans la console (touche F12).
       console.log("Service worker non enregistré :", erreur);
     });
+  });
+
+  /* ============== LA MISE À JOUR QUI S'APPLIQUE TOUTE SEULE ============
+
+     LE PROBLÈME QUE ÇA RÈGLE.
+     Quand on publie une nouvelle version, la page a déjà chargé ses
+     fichiers AVANT que le nouveau service worker n'arrive. On voyait
+     donc encore l'ancienne appli, et il fallait la relancer une
+     deuxième fois pour voir les changements. Pire : on pouvait se
+     retrouver avec un mélange — le nouveau bouton de la page, mais
+     l'ancien code derrière, qui ne sait pas quoi en faire.
+
+     LA SOLUTION.
+     "controllerchange" se déclenche au moment précis où le nouveau
+     service worker prend le relais. On recharge alors la page une fois :
+     tout revient alors de la même version, d'un seul coup.
+
+     DEUX SÉCURITÉS.
+     - copieDejaEnPlace : au tout premier passage il n'y a rien à
+       remplacer, donc rien à recharger ;
+     - dejaRecharge : un verrou, pour ne pas recharger en boucle. */
+  let dejaRecharge = false;
+
+  navigator.serviceWorker.addEventListener("controllerchange", function () {
+    if (dejaRecharge || !copieDejaEnPlace) {
+      return;
+    }
+    dejaRecharge = true;
+    window.location.reload();
   });
 }
 
