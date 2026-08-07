@@ -8,6 +8,18 @@ révèle une étape** du raisonnement.
 Sur ordinateur, on peut aussi faire un **double-clic sur `index.html`** :
 tout fonctionne sans internet et sans rien installer.
 
+## Se tromper n'est pas grave
+
+Sous la carte, deux boutons rattrapent une tape malheureuse :
+
+- **◂ Étape précédente** : revient d'un cran dans le calcul en cours ;
+- **◂◂ Fraction précédente** : revient à la fraction d'avant, exactement
+  là où on l'avait laissée. Les **20 dernières** fractions sont gardées
+  en mémoire.
+
+Un bouton grisé veut dire qu'il n'y a plus rien derrière. Sur ordinateur,
+la touche <kbd>←</kbd> fait la même chose que « Étape précédente ».
+
 ## Les trois types d'exercices
 
 | Bouton | Exemple | Ce qu'on apprend |

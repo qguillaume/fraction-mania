@@ -120,10 +120,30 @@
       </div>
     </div>
 
-    <!-- ================= L'AIDE ================= -->
-    <p class="aide">
+    <!-- ================= LE RETOUR EN ARRIÈRE =================
+         Deux boutons pour rattraper une tape malheureuse, au doigt :
+           - revenir d'une étape dans le calcul en cours
+           - revenir carrément à la fraction précédente
+         Ils sont EN DEHORS de la carte : les cliquer ne fait donc pas
+         avancer le calcul. Le JavaScript les grise (attribut disabled)
+         quand il n'y a plus rien derrière. -->
+    <div class="navigation" role="group" aria-label="Revenir en arrière">
+      <button type="button" id="fraction-precedente">
+        <span aria-hidden="true">◂◂</span> Fraction précédente
+      </button>
+      <button type="button" id="etape-precedente">
+        <span aria-hidden="true">◂</span> Étape précédente
+      </button>
+    </div>
+
+    <!-- ================= L'AIDE =================
+         La première phrase parle du clavier : elle ne sert à rien sur un
+         téléphone, le CSS la cache donc sur les petits écrans tactiles. -->
+    <p class="aide aide-clavier">
       Raccourcis : <kbd>Espace</kbd> ou <kbd>Entrée</kbd> = étape suivante ·
       <kbd>←</kbd> = étape précédente · <kbd>N</kbd> = nouvelle fraction.
+    </p>
+    <p class="aide">
       Les facteurs utiles sont écrits
       <span class="hl">en bleu, en gras et soulignés</span> pour rester
       repérables même sans distinguer les couleurs.

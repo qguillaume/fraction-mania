@@ -24,7 +24,7 @@
 
 /* Le nom de la boîte. En changeant le numéro, on repart d'une boîte
    neuve, et l'ancienne est jetée automatiquement (voir "activate"). */
-const VERSION = "fraction-mania-v2";
+const VERSION = "fraction-mania-v3";
 
 /* La liste des fichiers à garder en copie.
    Les chemins commencent par "./" : ils sont donc relatifs à ce fichier.

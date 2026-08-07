@@ -321,12 +321,50 @@ button[aria-pressed="true"] {
   font-weight: 600;
 }
 
+/* Les deux boutons "retour en arrière", juste sous la carte.
+   flex: 1 partage la largeur en deux parts égales, et min-height leur
+   donne une hauteur confortable pour le pouce sur un téléphone. */
+.navigation {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  gap: 10px;
+}
+
+.navigation button {
+  flex: 1;
+  min-height: 52px;
+  padding: 10px 12px;
+}
+
+/* Grisé quand il n'y a plus rien derrière : le bouton est estompé ET
+   le curseur devient "interdit". Deux signaux, encore une fois. */
+.navigation button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.navigation button:disabled:hover {
+  border-color: var(--trait);
+}
+
 .aide {
   width: 100%;
   max-width: 900px;
+  margin: 0;
   color: var(--encre-douce);
   font-size: 0.9rem;
   line-height: 1.5;
+}
+
+/* SUR TÉLÉPHONE : on cache la phrase qui parle des touches du clavier.
+   La condition se lit : "écran étroit, OU appareil dont le pointeur est
+   gros et imprécis (un doigt) et qui ne sait pas survoler (pas de
+   souris)" — autrement dit un téléphone ou une tablette. */
+@media (max-width: 640px), (pointer: coarse) and (hover: none) {
+  .aide-clavier {
+    display: none;
+  }
 }
 
 /* <kbd> sert à afficher une touche du clavier, comme Espace. */

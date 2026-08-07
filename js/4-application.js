@@ -14,14 +14,32 @@
 
 /* ====================== CE DONT ON SE SOUVIENT ======================== */
 
+/* Combien de fractions on garde en mémoire pour pouvoir revenir dessus.
+   Au-delà, la plus ancienne est oubliée : inutile d'encombrer le
+   téléphone avec des exercices vieux d'une demi-heure. */
+const MEMOIRE = 20;
+
 /* Un seul objet contient tout ce que l'application doit retenir.
-   On appelle ça "l'état". Quand l'état change, on redessine l'écran. */
+   On appelle ça "l'état". Quand l'état change, on redessine l'écran.
+
+   historique est la pile des fractions déjà tirées, de la plus ancienne
+   à la plus récente. Chaque case ressemble à ceci :
+
+       { etapes: [ ...les étapes du calcul... ], etape: 2 }
+
+   On y range AUSSI l'étape où on en était : en revenant sur une
+   fraction, on la retrouve exactement là où on l'avait laissée. */
 const etat = {
-  mode: "melange",   // "simplifier", "somme", "multiplication" ou "melange"
-  niveau: "facile",  // "facile", "moyen" ou "costaud"
-  etapes: [],        // la liste des étapes de l'exercice en cours
-  numeroEtape: 0     // quelle étape on affiche (0 = la première)
+  mode: "melange",     // "simplifier", "somme", "multiplication" ou "melange"
+  niveau: "facile",    // "facile", "moyen" ou "costaud"
+  historique: [],      // toutes les fractions tirées, dans l'ordre
+  numeroExercice: -1   // laquelle on regarde (-1 = aucune, tout au départ)
 };
+
+/* Raccourci : la fraction actuellement affichée. */
+function exerciceAffiche() {
+  return etat.historique[etat.numeroExercice];
+}
 
 
 /* ================= LES MORCEAUX DE PAGE QU'ON MODIFIE ================= */
@@ -35,6 +53,8 @@ const zoneExplication = document.getElementById("note");
 const zonePoints = document.getElementById("points");
 const zoneCompteur = document.getElementById("compteur");
 const zoneIndice = document.getElementById("indice");
+const boutonEtapePrecedente = document.getElementById("etape-precedente");
+const boutonFractionPrecedente = document.getElementById("fraction-precedente");
 
 
 /* ======================= FABRIQUER UN EXERCICE ======================== */
@@ -46,15 +66,28 @@ function nouvelExercice() {
       ? choix(["simplifier", "somme", "multiplication"])
       : etat.mode;
 
+  let etapes;
+
   if (type === "simplifier") {
-    etat.etapes = genererSimplification(etat.niveau);
+    etapes = genererSimplification(etat.niveau);
   } else if (type === "somme") {
-    etat.etapes = genererSommeDifference(etat.niveau);
+    etapes = genererSommeDifference(etat.niveau);
   } else {
-    etat.etapes = genererMultiplication(etat.niveau);
+    etapes = genererMultiplication(etat.niveau);
   }
 
-  etat.numeroEtape = 0; // on repart de la première étape
+  /* Si on était revenu en arrière, les fractions "d'après" sont
+     abandonnées : la nouvelle prend leur place. C'est le même principe
+     que le bouton Retour d'un navigateur. */
+  etat.historique = etat.historique.slice(0, etat.numeroExercice + 1);
+  etat.historique.push({ etapes: etapes, etape: 0 });
+
+  // On ne garde que les MEMOIRE dernières : shift enlève la plus ancienne.
+  while (etat.historique.length > MEMOIRE) {
+    etat.historique.shift();
+  }
+
+  etat.numeroExercice = etat.historique.length - 1;
   afficher();
 }
 
@@ -62,8 +95,9 @@ function nouvelExercice() {
 /* ==================== METTRE L'ÉCRAN À JOUR =========================== */
 
 function afficher() {
-  const etape = etat.etapes[etat.numeroEtape];
-  const estLaDerniere = etat.numeroEtape === etat.etapes.length - 1;
+  const exercice = exerciceAffiche();
+  const etape = exercice.etapes[exercice.etape];
+  const estLaDerniere = exercice.etape === exercice.etapes.length - 1;
 
   // 1) Le calcul et son explication.
   //    innerHTML = "remplace tout le contenu de cet élément par ceci".
@@ -78,12 +112,12 @@ function afficher() {
   // 3) Les petits ronds de progression, un par étape.
   let htmlDesPoints = "";
 
-  for (let i = 0; i < etat.etapes.length; i++) {
+  for (let i = 0; i < exercice.etapes.length; i++) {
     let classe = "point"; // rond vide : étape pas encore atteinte
 
-    if (i === etat.numeroEtape) {
+    if (i === exercice.etape) {
       classe = "point active"; // rond entouré d'un halo : étape en cours
-    } else if (i < etat.numeroEtape) {
+    } else if (i < exercice.etape) {
       classe = "point faite";  // rond plein : étape déjà vue
     }
 
@@ -94,30 +128,59 @@ function afficher() {
 
   // 4) Le compteur et le petit texte "clique ici".
   zoneCompteur.textContent =
-    "Étape " + (etat.numeroEtape + 1) + " / " + etat.etapes.length;
+    "Étape " + (exercice.etape + 1) + " / " + exercice.etapes.length;
 
   zoneIndice.textContent = estLaDerniere
     ? "✔ Terminé — clique pour une nouvelle ▸"
     : "Clique ici ▸";
+
+  // 5) Les deux boutons de retour : grisés s'il n'y a rien derrière.
+  boutonEtapePrecedente.disabled = exercice.etape === 0;
+  boutonFractionPrecedente.disabled = etat.numeroExercice === 0;
 }
 
 
 /* ================= AVANCER ET RECULER DANS LE CALCUL ================== */
 
 function etapeSuivante() {
-  if (etat.numeroEtape < etat.etapes.length - 1) {
-    etat.numeroEtape = etat.numeroEtape + 1;
+  const exercice = exerciceAffiche();
+
+  if (exercice.etape < exercice.etapes.length - 1) {
+    exercice.etape = exercice.etape + 1;
     afficher();
   } else {
-    // On était déjà à la fin : on enchaîne sur un nouvel exercice.
-    nouvelExercice();
+    // On était déjà à la fin : on passe à la fraction suivante.
+    exerciceSuivant();
   }
 }
 
 function etapePrecedente() {
-  if (etat.numeroEtape > 0) {
-    etat.numeroEtape = etat.numeroEtape - 1;
+  const exercice = exerciceAffiche();
+
+  if (exercice.etape > 0) {
+    exercice.etape = exercice.etape - 1;
     afficher();
+  }
+}
+
+
+/* ================ CHANGER DE FRACTION (SANS RIEN PERDRE) ============== */
+
+function exercicePrecedent() {
+  if (etat.numeroExercice > 0) {
+    etat.numeroExercice = etat.numeroExercice - 1;
+    afficher();
+  }
+}
+
+function exerciceSuivant() {
+  /* Si on est revenu en arrière, "suivant" veut dire : reprendre la
+     fraction qu'on avait déjà vue. Sinon, on en tire une nouvelle. */
+  if (etat.numeroExercice < etat.historique.length - 1) {
+    etat.numeroExercice = etat.numeroExercice + 1;
+    afficher();
+  } else {
+    nouvelExercice();
   }
 }
 
@@ -155,6 +218,10 @@ document.addEventListener("keydown", function (evenement) {
     nouvelExercice();
   }
 });
+
+// Les deux boutons de retour en arrière, sous la carte.
+boutonEtapePrecedente.addEventListener("click", etapePrecedente);
+boutonFractionPrecedente.addEventListener("click", exercicePrecedent);
 
 // Le bouton bleu "Nouvelle fraction".
 document.getElementById("nouvelle").addEventListener("click", nouvelExercice);
