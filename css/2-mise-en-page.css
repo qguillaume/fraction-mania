@@ -204,6 +204,14 @@ button[aria-pressed="true"] {
   line-height: 1.1;
 }
 
+/* Les lignes qui comptent beaucoup d'éléments (7 = 1 × 4 + 3, ou
+   3/4 = 0,75 = 75 %) passent en plus petit : sinon elles déborderaient
+   de la carte sur un téléphone. Le JavaScript pose la classe "dense". */
+.expr.dense {
+  font-size: clamp(1.5rem, 5.5vw, 2.9rem);
+  gap: 10px;
+}
+
 /* Une fraction = 3 éléments empilés verticalement :
    le numérateur, le trait, puis le dénominateur. */
 .frac {
@@ -234,11 +242,22 @@ button[aria-pressed="true"] {
   padding: 0 0.1em;
 }
 
-/* Les signes +  −  × entre deux fractions. */
+/* Les signes  +  −  ×  ÷  =  <  >  ?  entre deux fractions. */
 .op {
   color: var(--orange);
   font-weight: 800;
   padding: 0 0.1em;
+}
+
+/* Un mot de liaison, comme le "de" de « les 3/4 de 20 € ».
+   Écrit bien plus petit que les nombres et en gris : c'est un mot de
+   la phrase, pas un élément du calcul. */
+.mot {
+  font-size: 0.42em;
+  font-weight: 600;
+  color: var(--encre-douce);
+  padding: 0 0.3em;
+  white-space: nowrap;
 }
 
 /* LA MISE EN ÉVIDENCE (le fameux "× 2").

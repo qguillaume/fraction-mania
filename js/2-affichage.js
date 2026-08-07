@@ -7,12 +7,13 @@
    La solution : on décrit le calcul avec des petites boîtes, et ce
    fichier transforme ces boîtes en HTML que le navigateur sait afficher.
 
-   Il y a 4 sortes de boîtes :
+   Il y a 5 sortes de boîtes :
 
      morceau("× 2", true)   un bout de texte, à mettre en évidence ou non
      fraction([...], [...]) une fraction : la liste du haut, celle du bas
      entier(3)              un nombre tout seul, sans barre de fraction
-     operation("+")         le signe entre deux fractions : + − ×
+     operation("+")         un signe : + − × ÷ = < > ?
+     mot("de")              un petit mot de liaison, écrit en plus petit
 
    Exemple, pour afficher   4 × 2
                             -----
@@ -53,9 +54,16 @@ function entier(valeur) {
   return { type: "entier", valeur: valeur };
 }
 
-/* Un signe d'opération : "+", "−" ou "×". */
+/* Un signe d'opération : "+", "−", "×", "÷", "=", "<", ">" ou "?". */
 function operation(symbole) {
   return { type: "operation", symbole: symbole };
+}
+
+/* Un petit mot de liaison, comme le "de" de « les 3/4 de 20 € ».
+   Il s'écrit en plus petit et en gris : c'est du texte, pas un nombre,
+   il ne doit pas prendre autant de place qu'un chiffre. */
+function mot(texte) {
+  return { type: "mot", texte: String(texte) };
 }
 
 /* Bien pratique : si le dénominateur vaut 1, on affiche un entier.
@@ -103,6 +111,10 @@ function dessinerBoite(boite) {
 
   if (boite.type === "entier") {
     return '<span class="entier">' + echapper(String(boite.valeur)) + "</span>";
+  }
+
+  if (boite.type === "mot") {
+    return '<span class="mot">' + echapper(boite.texte) + "</span>";
   }
 
   // Sinon c'est une fraction : le haut, le trait, puis le bas.

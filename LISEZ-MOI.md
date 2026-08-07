@@ -43,7 +43,9 @@ Elle ne s'affiche qu'à la fin, et disparaît si on revient en arrière.
 Quand le dénominateur est trop grand (au-delà de 30 parts à dessiner),
 les petites graduations sont omises : ça deviendrait illisible.
 
-## Les trois types d'exercices
+## Les sept types d'exercices
+
+**Calculer** — la technique :
 
 | Bouton | Exemple | Ce qu'on apprend |
 | --- | --- | --- |
@@ -51,9 +53,25 @@ les petites graduations sont omises : ça deviendrait illisible.
 | Somme / différence | 1/4 + 2/3 | mettre au même dénominateur |
 | Multiplication | 2/3 × 4/5 | multiplier les hauts et les bas |
 
+**Comprendre** — le sens de la fraction, qui pèse le plus lourd en 6e :
+
+| Bouton | Exemple | Ce qu'on apprend |
+| --- | --- | --- |
+| Quantité | les 3/4 de 20 € | partager, puis prendre — sur un vrai énoncé |
+| Comparer | 1/3 ou 2/5 ? | comparer des parts de même taille |
+| Encadrer | 7/4 = 1 + 3/4 | donner du sens aux fractions plus grandes que 1 |
+| Décimal et % | 3/4 = 0,75 = 75 % | le pont avec le reste du programme |
+
+**Quantité** tire une petite histoire au hasard (Paul et ses euros, une
+classe d'élèves, un sac de billes, un trajet en km...) : c'est le format
+« problème » qui bloque souvent, même quand la technique est acquise.
+
+**Comparer** propose une fois sur quatre la comparaison à **1/2**, le
+point de repère qui revient le plus souvent en contrôle.
+
 Trois niveaux : **Facile** (dénominateurs identiques), **Moyen** (un
 dénominateur dans la table de l'autre), **Costaud** (dénominateurs
-quelconques).
+quelconques). **Mélange** pioche dans les sept types.
 
 ## Installer l'appli sur le téléphone
 
@@ -80,10 +98,10 @@ css/1-couleurs.css      TOUTES les couleurs (le seul fichier à modifier
                         pour changer les couleurs)
 css/2-mise-en-page.css  les tailles, les positions, les formes
 
-js/1-outils.js          les maths de base : pgcd, ppcm, hasard
+js/1-outils.js          les maths de base : pgcd, ppcm, hasard, décimales
 js/2-affichage.js       comment dessiner une fraction sur deux lignes,
                         et la demi-droite graduée du résultat final
-js/3-exercices.js       la fabrique des trois types d'exercices
+js/3-exercices.js       la fabrique des sept types d'exercices
 js/4-application.js     le chef d'orchestre : clics, clavier, boutons
 js/5-installation.js    l'installation sur le téléphone
 ```
@@ -147,7 +165,12 @@ Quelques idées faciles pour commencer :
   `css/1-couleurs.css` ;
 - rendre le niveau « Costaud » plus dur : dans `js/3-exercices.js`,
   augmenter `denominateurMax` ;
-- écrire une nouvelle phrase d'explication dans `js/3-exercices.js` ;
+- écrire une nouvelle phrase d'explication, ou ajouter une histoire à la
+  liste `HISTOIRES`, dans `js/3-exercices.js` ;
+- **ajouter un type d'exercice** : écrire une fonction
+  `genererMachin(niveau)`, l'ajouter à la liste `FABRIQUES` en bas de
+  `js/3-exercices.js`, et poser un bouton `data-mode="machin"` dans
+  `index.html`. Le mode « Mélange » le prendra en compte tout seul ;
 - afficher la demi-droite plus tôt : il suffit d'ajouter un
   `valeur: { haut: ..., bas: ... }` à n'importe quelle étape de
   `js/3-exercices.js`.

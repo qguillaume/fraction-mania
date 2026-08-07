@@ -61,21 +61,15 @@ const boutonFractionPrecedente = document.getElementById("fraction-precedente");
 /* ======================= FABRIQUER UN EXERCICE ======================== */
 
 function nouvelExercice() {
-  // En mode "mélange", on tire au sort le type d'exercice.
+  /* En mode "mélange", on tire au sort parmi TOUS les types connus.
+     Object.keys donne la liste des noms rangés dans FABRIQUES
+     (voir 3-exercices.js) : ajouter un exercice là-bas suffit, il
+     entrera dans le mélange sans rien changer ici. */
   const type =
-    etat.mode === "melange"
-      ? choix(["simplifier", "somme", "multiplication"])
-      : etat.mode;
+    etat.mode === "melange" ? choix(Object.keys(FABRIQUES)) : etat.mode;
 
-  let etapes;
-
-  if (type === "simplifier") {
-    etapes = genererSimplification(etat.niveau);
-  } else if (type === "somme") {
-    etapes = genererSommeDifference(etat.niveau);
-  } else {
-    etapes = genererMultiplication(etat.niveau);
-  }
+  // On appelle la fonction correspondante.
+  const etapes = FABRIQUES[type](etat.niveau);
 
   /* Si on était revenu en arrière, les fractions "d'après" sont
      abandonnées : la nouvelle prend leur place. C'est le même principe
@@ -104,6 +98,10 @@ function afficher() {
   //    innerHTML = "remplace tout le contenu de cet élément par ceci".
   zoneCalcul.innerHTML = dessinerCalcul(etape.calcul);
   zoneExplication.innerHTML = etape.explication;
+
+  /* Les lignes longues (7 = 1 × 4 + 3) passent en caractères plus petits :
+     à la taille normale, elles déborderaient sur un téléphone. */
+  zoneCalcul.classList.toggle("dense", etape.calcul.length > 3);
 
   // 2) La bordure verte et double quand le calcul est terminé.
   //    classList.toggle ajoute la classe si le 2e argument est vrai,

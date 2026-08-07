@@ -81,3 +81,30 @@ function pgcd(a, b) {
 function ppcm(a, b) {
   return (a / pgcd(a, b)) * b;
 }
+
+
+/* -----------------------------------------------------------------------
+   nombreFrancais(0.75)  ->  "0,75"
+
+   Deux corrections d'un coup :
+
+   1. LA VIRGULE. En France on écrit 0,75 ; l'ordinateur écrit 0.75.
+
+   2. LES DÉCIMALES FANTÔMES. Un ordinateur range les nombres à virgule
+      en binaire, et certains ne tombent pas juste : 1/40 devient
+      0.025000000000000001. On arrondit donc à 6 décimales, puis on
+      enlève les zéros inutiles à la fin.
+
+   ATTENTION au piège : on ne coupe les zéros QUE dans la partie après
+   la virgule. Sinon "10" deviendrait "1" !
+   ----------------------------------------------------------------------- */
+function nombreFrancais(nombre) {
+  // split(".") coupe "10.500000" en deux morceaux : "10" et "500000".
+  const morceaux = nombre.toFixed(6).split(".");
+  const decimales = morceaux[1].replace(/0+$/, ""); // "500000" -> "5"
+
+  if (decimales === "") {
+    return morceaux[0]; // un nombre entier : pas de virgule du tout
+  }
+  return morceaux[0] + "," + decimales;
+}
