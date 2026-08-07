@@ -86,6 +86,18 @@ qui marche **sans connexion** une fois installée.
   puis « Sur l'écran d'accueil ». Safari ne montre jamais de bouton
   d'installation : c'est normal, il faut passer par là.
 
+### L'appli suit le verrou de rotation du téléphone
+
+`manifest.webmanifest` ne contient **volontairement aucune ligne
+`orientation`**. Ne la remets pas : écrire `"orientation": "any"` est
+une demande explicite de « je gère toutes les orientations », et une
+appli installée passe alors **par-dessus le verrou de rotation** du
+téléphone — elle bascule même quand l'utilisateur a bloqué l'écran.
+
+Sans cette ligne, l'appli obéit au réglage du téléphone, comme prévu.
+Si un jour tu veux au contraire la forcer en portrait quoi qu'il
+arrive, la ligne à ajouter est `"orientation": "portrait"`.
+
 ## Où est rangé quoi ?
 
 ```
